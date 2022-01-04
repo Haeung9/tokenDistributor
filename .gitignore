@@ -1,1 +1,8 @@
+node_modules/
+
+# remix
 artifacts/
+
+# truffle
+build/
+migrations/
