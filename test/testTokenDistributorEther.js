@@ -4,7 +4,7 @@ var chai = require('chai')
 
 const tokenDistributor = artifacts.require("tokenDistributor");
 
-contract("tokenDistributor: basic functionalities on Ether", async (accounts) => {
+contract("tokenDistributor: functionalities on Ether", async (accounts) => {
     let [acc1, acc2, acc3, acc4, acc5] = accounts;
     let contractInstance;
     beforeEach(async () => {

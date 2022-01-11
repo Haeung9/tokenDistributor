@@ -1,3 +1,5 @@
+const { assert } = require('chai');
+
 var chai = require('chai')
   , expect = chai.expect
   , should = chai.should();
@@ -43,16 +45,41 @@ contract("ERC20", async(accounts) => {
             expect(recipantBalance.toString()).to.equal('10');
         })
     })
-    xcontext('Token transfer should fail with:', async () => {
-        xit('out of balance', async () => {});
-        xit('invalid spender', async () => {});
-        xit('out of allowance', async () => {});
-        xit('transfer to the zero address', async () => {});
-    })
-    xcontext('Mint and burn', async () => {
-        xit('mint', async () => {});
-        xit('mint by invalid minter', async () => {});
-        xit('burn', async () => {});
-        xit('burn by invalid owner', async () => {});
+    context('Token transfer should fail with:', async () => {
+        it('exceeds balance', async () => {
+            try {
+                await contractInstance.transfer(accounts[1],'10', { from: accounts[2] })
+                assert.fail('Could not catch error')
+            } catch(error) {
+                expect(error.message).to.include('exceeds balance')
+            }
+        });
+        it('invalid spender', async () => {
+            await contractInstance.approve(accounts[1],'10', {from: owner})
+            try {
+                await contractInstance.transferFrom(owner, accounts[1], '10', {from: accounts[2]})
+                assert.fail('Could not catch error')
+            } catch(error) {
+                expect(error.message).to.include('exceeds allowance')
+            }
+        });
+        it('exceeds allowance', async () => {
+            await contractInstance.approve(accounts[1],'10', {from: owner})
+            try {
+                await contractInstance.transferFrom(owner, accounts[2], '20', {from: accounts[1]})
+                assert.fail('Could not catch error')
+            } catch (error) {
+                expect(error.message).to.include('exceeds allowance')
+            }
+        });
+        it('transfer to the zero address', async () => {
+            const zeroAddress = '0x0000000000000000000000000000000000000000'
+            try {
+                await contractInstance.transfer(zeroAddress,'10', { from: owner })
+                assert.fail('Could not catch error')
+            } catch (error) {
+                expect(error.message).to.include('zero address')
+            }
+        });
     })
 })
