@@ -6,13 +6,15 @@
   "author": "haeung9 <haeung@gist.ac.kr>",
   "license": "MIT",
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.0",
     "chai": "^4.3.4",
-    "truffle": "^5.4.26"
+    "dotenv": "^11.0.0",
+    "truffle": "^5.4.26",
+    "web3": "^1.6.1"
   },
   "scripts": {
-    "tinit": "truffle init",
     "compile": "truffle compile",
     "test": "truffle test",
-    "migrate": "truffle migrate"
+    "migrate": "truffle migrate --network rinkeby"
   }
 }
